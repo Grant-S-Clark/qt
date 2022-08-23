@@ -1,0 +1,10 @@
+To make the project file:
+   qmake-qt5 -project
+
+To create the makefile:
+   qmake-qt5 *filename*.pro
+
+now simply use:
+    make
+
+now you will have an executable to run using ./
