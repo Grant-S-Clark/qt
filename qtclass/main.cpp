@@ -3,17 +3,14 @@
 
 #include <QApplication>
 #include <QPushButton>
+#include "Window.h"
 
 int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
-    QPushButton button("button label");
-    button.setWindowTitle("Qt");
-    button.resize(125, 30);
 
-    QFont font("courier");
-    button.setFont(font);
-
-    button.show();
+    Window window(250, 250);
+    window.show();
+    
     return app.exec();
 }
