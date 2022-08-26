@@ -16,6 +16,7 @@ public:
     {
         setFixedSize(size_x, size_y);
         setWindowTitle(title);
+        setStyleSheet("QLabel {font-family: Arial}");
     }
     
 private:
