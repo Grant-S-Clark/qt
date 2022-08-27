@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Window_t {
-    QByteArrayData data[4];
-    char stringdata0[23];
+    QByteArrayData data[3];
+    char stringdata0[21];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,11 +34,10 @@ static const qt_meta_stringdata_Window_t qt_meta_stringdata_Window = {
     {
 QT_MOC_LITERAL(0, 0, 6), // "Window"
 QT_MOC_LITERAL(1, 7, 12), // "button_press"
-QT_MOC_LITERAL(2, 20, 0), // ""
-QT_MOC_LITERAL(3, 21, 1) // "i"
+QT_MOC_LITERAL(2, 20, 0) // ""
 
     },
-    "Window\0button_press\0\0i"
+    "Window\0button_press\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -56,10 +55,10 @@ static const uint qt_meta_data_Window[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   19,    2, 0x08 /* Private */,
+       1,    0,   19,    2, 0x08 /* Private */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -70,10 +69,11 @@ void Window::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         auto *_t = static_cast<Window *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->button_press((*reinterpret_cast< const int(*)>(_a[1]))); break;
+        case 0: _t->button_press(); break;
         default: ;
         }
     }
+    Q_UNUSED(_a);
 }
 
 QT_INIT_METAOBJECT const QMetaObject Window::staticMetaObject = { {

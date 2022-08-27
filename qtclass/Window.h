@@ -40,7 +40,7 @@ public:
         label_->setStyleSheet("border: 2px solid black;");
 
         connect(buttons_[0], SIGNAL(clicked()),
-                this, SLOT(button_press(0)));
+                this, SLOT(button_press()));
     }
 
     ~Window()
@@ -77,8 +77,9 @@ public:
     }
 
 private slots:
-    void button_press(const int i)
+    void button_press()
     {
+        int i = 0;
         label_->setText("khdsfkjs");
         switch (i)
         {

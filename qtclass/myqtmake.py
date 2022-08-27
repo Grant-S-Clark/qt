@@ -85,7 +85,7 @@ def make_Makefile(pro_filename):
     filename_wo_pro = pro_filename.replace('.pro', '')
     system('qmake-qt5 %s' % pro_filename)
     s = readfile('Makefile').strip()
-    s += '\n\nr:\n\texport "QT_LOGGING_RULES=*.debug=true";./%s\n' % \
+    s += '\n\nr:\n\texport "QT_LOGGING_RULES=*.debug=false";./%s\n' % \
         filename_wo_pro
     s += '\n\nc:\n\trm -f %s *.o core *.core main*.jpg moc_*' % filename_wo_pro
     s += '\n\nmain.jpg:\n\txcapture ' \

@@ -748,7 +748,7 @@ uninstall:  FORCE
 FORCE:
 
 r:
-	export "QT_LOGGING_RULES=*.debug=true";./qtclass
+	export "QT_LOGGING_RULES=*.debug=false";./qtclass
 
 
 c:
