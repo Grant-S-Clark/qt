@@ -133,39 +133,60 @@ private slots:
     // 7
     void press_0()
     {
-        num0 *= 10;
-        num0 += 7;
+        if (decimal)
+        {
+            num0 += 0.7 / pow(10, digits);
+        }
+
+        else
+        {
+            num0 *= 10;
+            num0 += 7;
+        }
 
         ++digits;
-        
         update_text();
-        
+
         return;
     }
 
     // 8
     void press_1()
     {
-        num0 *= 10;
-        num0 += 8;
+        if (decimal)
+        {
+            num0 += 0.8 / pow(10, digits);
+        }
+
+        else
+        {
+            num0 *= 10;
+            num0 += 8;
+        }
 
         ++digits;
-        
         update_text();
-        
+
         return;
     }
 
     // 9
     void press_2()
     {
-        num0 *= 10;
-        num0 += 9;
+        if (decimal)
+        {
+            num0 += 0.9 / pow(10, digits);
+        }
+
+        else
+        {
+            num0 *= 10;
+            num0 += 9;
+        }
 
         ++digits;
-        
         update_text();
-        
+
         return;
     }
 
@@ -180,24 +201,45 @@ private slots:
     // DEL
     void press_4()
     {
-        num0 = ((int)num0 / 10) + (num0 - (int)num0);
-        --digits;
+        if (decimal)
+        {
+            num0 -= (long double)((long int)(num0 * pow(10, digits)) % 10) / pow(10, digits);
+            --digits;
+            if (digits < 0)
+                decimal = false;
+        }
+
+        else
+        {
+            num0 = ((int)num0 / 10) + (num0 - (int)num0);
+            
+            if (num0 != 0.0)
+                --digits;
+        }
+
 
         update_text();
-
+        
         return;
     }
 
     // 4
     void press_5()
     {
-        num0 *= 10;
-        num0 += 4;
+        if (decimal)
+        {
+            num0 += 0.4 / pow(10, digits);
+        }
+
+        else
+        {
+            num0 *= 10;
+            num0 += 4;
+        }
 
         ++digits;
-        
         update_text();
-        
+
         return;
     }
 
@@ -205,13 +247,20 @@ private slots:
     // 5
     void press_6()
     {
-        num0 *= 10;
-        num0 += 5;
+        if (decimal)
+        {
+            num0 += 0.5 / pow(10, digits);
+        }
+
+        else
+        {
+            num0 *= 10;
+            num0 += 5;
+        }
 
         ++digits;
-        
         update_text();
-        
+
         return;
     }
 
@@ -219,13 +268,20 @@ private slots:
     // 6
     void press_7()
     {
-        num0 *= 10;
-        num0 += 6;
+        if (decimal)
+        {
+            num0 += 0.6 / pow(10, digits);
+        }
+
+        else
+        {
+            num0 *= 10;
+            num0 += 6;
+        }
 
         ++digits;
-        
         update_text();
-        
+
         return;
     }
 
@@ -243,6 +299,8 @@ private slots:
         num0 = 0;
 
         digits = 1;
+        operation = ' ';
+        decimal = false;
         
         update_text();
         
@@ -252,39 +310,60 @@ private slots:
     // 1
     void press_10()
     {
-        num0 *= 10;
-        num0 += 1;
+        if (decimal)
+        {
+            num0 += 0.1 / pow(10, digits);
+        }
+
+        else
+        {
+            num0 *= 10;
+            num0 += 1;
+        }
 
         ++digits;
-        
         update_text();
-        
+
         return;
     }
 
     // 2
     void press_11()
     {
-        num0 *= 10;
-        num0 += 2;
+        if (decimal)
+        {
+            num0 += 0.2 / pow(10, digits);
+        }
+
+        else
+        {
+            num0 *= 10;
+            num0 += 2;
+        }
 
         ++digits;
-        
         update_text();
-        
+
         return;
     }
 
     // 3
     void press_12()
     {
-        num0 *= 10;
-        num0 += 3;
+        if (decimal)
+        {
+            num0 += 0.3 / pow(10, digits);
+        }
+
+        else
+        {
+            num0 *= 10;
+            num0 += 3;
+        }
 
         ++digits;
-        
         update_text();
-        
+
         return;
     }
 
@@ -307,12 +386,19 @@ private slots:
     // 0
     void press_15()
     {
-        num0 *= 10;
+        if (decimal)
+        {
+            num0 += 0.0 / pow(10, digits);
+        }
+
+        else
+        {
+            num0 *= 10;
+        }
 
         ++digits;
-        
         update_text();
-        
+
         return;
     }
 
@@ -320,6 +406,13 @@ private slots:
     void press_16()
     {
         //Switch to adding decimals.
+        if (!decimal)
+        {
+            decimal = true;
+            digits = 0;
+        
+            update_text();
+        }
         
         return;
     }
