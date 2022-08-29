@@ -18,7 +18,8 @@ public:
     Window(int size_x, int size_y,
           QString title = "Qt",
            QWidget * parent = nullptr) :
-        QWidget(parent), num(0), digits(1)
+        QWidget(parent), num0(0), num1(0),
+        digits(1), operation(' '), decimal(false)
     {
         setFixedSize(size_x, size_y);
         setWindowTitle(title);
@@ -122,7 +123,7 @@ public:
     void update_text()
     {
         std::ostringstream oss;
-        oss << num;
+        oss << num0;
         label_->setText(oss.str().c_str());
 
         return;
@@ -132,8 +133,8 @@ private slots:
     // 7
     void press_0()
     {
-        num *= 10;
-        num += 7;
+        num0 *= 10;
+        num0 += 7;
 
         ++digits;
         
@@ -145,7 +146,12 @@ private slots:
     // 8
     void press_1()
     {
+        num0 *= 10;
+        num0 += 8;
+
+        ++digits;
         
+        update_text();
         
         return;
     }
@@ -153,7 +159,12 @@ private slots:
     // 9
     void press_2()
     {
+        num0 *= 10;
+        num0 += 9;
+
+        ++digits;
         
+        update_text();
         
         return;
     }
@@ -169,7 +180,7 @@ private slots:
     // DEL
     void press_4()
     {
-        num = ((int)num / 10) + (num - (int)num);
+        num0 = ((int)num0 / 10) + (num0 - (int)num0);
         --digits;
 
         update_text();
@@ -180,7 +191,12 @@ private slots:
     // 4
     void press_5()
     {
+        num0 *= 10;
+        num0 += 4;
 
+        ++digits;
+        
+        update_text();
         
         return;
     }
@@ -189,7 +205,12 @@ private slots:
     // 5
     void press_6()
     {
+        num0 *= 10;
+        num0 += 5;
 
+        ++digits;
+        
+        update_text();
         
         return;
     }
@@ -198,7 +219,12 @@ private slots:
     // 6
     void press_7()
     {
+        num0 *= 10;
+        num0 += 6;
 
+        ++digits;
+        
+        update_text();
         
         return;
     }
@@ -214,7 +240,11 @@ private slots:
     // AC
     void press_9()
     {
+        num0 = 0;
 
+        digits = 1;
+        
+        update_text();
         
         return;
     }
@@ -222,7 +252,12 @@ private slots:
     // 1
     void press_10()
     {
+        num0 *= 10;
+        num0 += 1;
 
+        ++digits;
+        
+        update_text();
         
         return;
     }
@@ -230,7 +265,12 @@ private slots:
     // 2
     void press_11()
     {
+        num0 *= 10;
+        num0 += 2;
 
+        ++digits;
+        
+        update_text();
         
         return;
     }
@@ -238,7 +278,12 @@ private slots:
     // 3
     void press_12()
     {
+        num0 *= 10;
+        num0 += 3;
 
+        ++digits;
+        
+        update_text();
         
         return;
     }
@@ -262,7 +307,11 @@ private slots:
     // 0
     void press_15()
     {
+        num0 *= 10;
 
+        ++digits;
+        
+        update_text();
         
         return;
     }
@@ -270,7 +319,7 @@ private slots:
     // .
     void press_16()
     {
-
+        //Switch to adding decimals.
         
         return;
     }
@@ -278,7 +327,7 @@ private slots:
     // =
     void press_17()
     {
-
+        //Compute
         
         return;
     }
@@ -327,8 +376,11 @@ private:
     
     QLabel * label_;
 
-    long double num;
+    long double num0, num1;
     int digits;
+
+    char operation;
+    bool decimal;
 };
     
 #endif
