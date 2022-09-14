@@ -52,8 +52,10 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp moc_Window.cpp
-OBJECTS       = main.o \
+SOURCES       = LongInt.cpp \
+		main.cpp moc_Window.cpp
+OBJECTS       = LongInt.o \
+		main.o \
 		moc_Window.o
 DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
@@ -252,7 +254,9 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib64/qt5/mkspecs/features/yacc.prf \
 		/usr/lib64/qt5/mkspecs/features/lex.prf \
-		qtclass.pro Window.h main.cpp
+		qtclass.pro LongInt.h \
+		Window.h LongInt.cpp \
+		main.cpp
 QMAKE_TARGET  = qtclass
 DESTDIR       = 
 TARGET        = qtclass
@@ -676,8 +680,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib64/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Window.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents LongInt.h Window.h $(DISTDIR)/
+	$(COPY_FILE) --parents LongInt.cpp main.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -713,6 +717,7 @@ compiler_moc_header_make_all: moc_Window.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_Window.cpp
 moc_Window.cpp: Window.h \
+		LongInt.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
 	/usr/lib64/qt5/bin/moc $(DEFINES) --include /home/student/cpp/qt/qtclass/moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/student/cpp/qt/qtclass -I/home/student/cpp/qt/qtclass -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/c++/9/x86_64-redhat-linux -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-redhat-linux/9/include -I/usr/local/include -I/usr/include Window.h -o moc_Window.cpp
@@ -733,7 +738,11 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
-main.o: main.cpp Window.h
+LongInt.o: LongInt.cpp LongInt.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o LongInt.o LongInt.cpp
+
+main.o: main.cpp Window.h \
+		LongInt.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 moc_Window.o: moc_Window.cpp 

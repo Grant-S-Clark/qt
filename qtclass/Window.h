@@ -11,6 +11,8 @@
 #include <string>
 #include <cmath>
 
+#include "LongInt.h"
+
 class Window : public QWidget
 {
     Q_OBJECT
@@ -19,7 +21,7 @@ public:
           QString title = "Qt",
            QWidget * parent = nullptr) :
         QWidget(parent), num0(0), num1(0),
-        digits(1), operation(' '), decimal(false)
+        operation(' '), decimal(0)
     {
         setFixedSize(size_x, size_y);
         setWindowTitle(title);
@@ -122,9 +124,12 @@ public:
 
     void update_text()
     {
-        std::ostringstream oss;
-        oss << num0;
-        label_->setText(oss.str().c_str());
+        char str[num0.size() + 1];
+        for (int i = 0, n = num0.size(); i < n; ++i)
+            str[i] = '0' + num0[i];
+        str[num0.size()] = '\0';
+        
+        label_->setText(str);
 
         return;
     }
@@ -133,18 +138,9 @@ private slots:
     // 7
     void press_0()
     {
-        if (decimal)
-        {
-            num0 += 0.7 / pow(10, digits);
-        }
+        num0 *= 10;
+        num0 += 7;
 
-        else
-        {
-            num0 *= 10;
-            num0 += 7;
-        }
-
-        ++digits;
         update_text();
 
         return;
@@ -153,18 +149,9 @@ private slots:
     // 8
     void press_1()
     {
-        if (decimal)
-        {
-            num0 += 0.8 / pow(10, digits);
-        }
-
-        else
-        {
-            num0 *= 10;
-            num0 += 8;
-        }
-
-        ++digits;
+        num0 *= 10;
+        num0 += 8;
+            
         update_text();
 
         return;
@@ -173,18 +160,9 @@ private slots:
     // 9
     void press_2()
     {
-        if (decimal)
-        {
-            num0 += 0.9 / pow(10, digits);
-        }
+        num0 *= 10;
+        num0 += 9;
 
-        else
-        {
-            num0 *= 10;
-            num0 += 9;
-        }
-
-        ++digits;
         update_text();
 
         return;
@@ -201,22 +179,8 @@ private slots:
     // DEL
     void press_4()
     {
-        if (decimal)
-        {
-            num0 -= (long double)((long int)(num0 * pow(10, digits)) % 10) / pow(10, digits);
-            --digits;
-            if (digits < 0)
-                decimal = false;
-        }
 
-        else
-        {
-            num0 = ((int)num0 / 10) + (num0 - (int)num0);
-            
-            if (num0 != 0.0)
-                --digits;
-        }
-
+        num0 /= 10;
 
         update_text();
         
@@ -226,18 +190,9 @@ private slots:
     // 4
     void press_5()
     {
-        if (decimal)
-        {
-            num0 += 0.4 / pow(10, digits);
-        }
+        num0 *= 10;
+        num0 += 4;
 
-        else
-        {
-            num0 *= 10;
-            num0 += 4;
-        }
-
-        ++digits;
         update_text();
 
         return;
@@ -247,18 +202,9 @@ private slots:
     // 5
     void press_6()
     {
-        if (decimal)
-        {
-            num0 += 0.5 / pow(10, digits);
-        }
+        num0 *= 10;
+        num0 += 5;
 
-        else
-        {
-            num0 *= 10;
-            num0 += 5;
-        }
-
-        ++digits;
         update_text();
 
         return;
@@ -268,18 +214,9 @@ private slots:
     // 6
     void press_7()
     {
-        if (decimal)
-        {
-            num0 += 0.6 / pow(10, digits);
-        }
+        num0 *= 10;
+        num0 += 6;
 
-        else
-        {
-            num0 *= 10;
-            num0 += 6;
-        }
-
-        ++digits;
         update_text();
 
         return;
@@ -297,10 +234,7 @@ private slots:
     void press_9()
     {
         num0 = 0;
-
-        digits = 1;
         operation = ' ';
-        decimal = false;
         
         update_text();
         
@@ -310,18 +244,9 @@ private slots:
     // 1
     void press_10()
     {
-        if (decimal)
-        {
-            num0 += 0.1 / pow(10, digits);
-        }
+        num0 *= 10;
+        num0 += 1;
 
-        else
-        {
-            num0 *= 10;
-            num0 += 1;
-        }
-
-        ++digits;
         update_text();
 
         return;
@@ -330,18 +255,9 @@ private slots:
     // 2
     void press_11()
     {
-        if (decimal)
-        {
-            num0 += 0.2 / pow(10, digits);
-        }
-
-        else
-        {
-            num0 *= 10;
-            num0 += 2;
-        }
-
-        ++digits;
+        num0 *= 10;
+        num0 += 2;
+        
         update_text();
 
         return;
@@ -350,18 +266,9 @@ private slots:
     // 3
     void press_12()
     {
-        if (decimal)
-        {
-            num0 += 0.3 / pow(10, digits);
-        }
+        num0 *= 10;
+        num0 += 3;
 
-        else
-        {
-            num0 *= 10;
-            num0 += 3;
-        }
-
-        ++digits;
         update_text();
 
         return;
@@ -386,17 +293,8 @@ private slots:
     // 0
     void press_15()
     {
-        if (decimal)
-        {
-            num0 += 0.0 / pow(10, digits);
-        }
+        num0 *= 10;
 
-        else
-        {
-            num0 *= 10;
-        }
-
-        ++digits;
         update_text();
 
         return;
@@ -405,14 +303,7 @@ private slots:
     // .
     void press_16()
     {
-        //Switch to adding decimals.
-        if (!decimal)
-        {
-            decimal = true;
-            digits = 0;
         
-            update_text();
-        }
         
         return;
     }
@@ -469,11 +360,10 @@ private:
     
     QLabel * label_;
 
-    long double num0, num1;
-    int digits;
+    LongInt num0, num1;
 
     char operation;
-    bool decimal;
+    int decimal;
 };
     
 #endif
