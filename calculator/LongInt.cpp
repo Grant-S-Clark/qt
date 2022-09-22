@@ -597,6 +597,21 @@ LongInt & LongInt::multeq_digit(const int mult)
 }
 
 
+LongInt & LongInt::pow(const LongInt & power)
+{
+    if (power < LongInt(0))
+        throw NegativePowerError();
+
+
+    LongInt mult = *this;
+    
+    for (LongInt i = 0; i < power; ++i)
+        *this *= mult;
+
+    return *this;
+}
+
+
 int LongInt::int_val() const
 {
     if (*this > INT_MAX || *this < INT_MIN)

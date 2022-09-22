@@ -68,6 +68,7 @@ public:
 
     LongInt & multeq_tenpower(const int);
     LongInt & multeq_digit(const int);
+    LongInt & pow(const LongInt&);
 
     int int_val() const;
     explicit operator int() const;
@@ -101,5 +102,6 @@ std::ostream & operator<<(std::ostream&, const LongInt&);
 
 class DivideByZeroError{};
 class IntConversionOverflowError{};
+class NegativePowerError{};
 
 #endif

@@ -11,7 +11,7 @@
 #include <string>
 #include <cmath>
 
-#include "Calculator.h"
+#include "LongInt.h"
 
 class Window : public QWidget
 {
@@ -21,7 +21,7 @@ public:
           QString title = "Qt",
            QWidget * parent = nullptr) :
         QWidget(parent), num0(0), num1(0),
-        operation(' '), decimal0(-1), decimal1(-1)
+        operation(' ')
     {
         setFixedSize(size_x, size_y);
         setWindowTitle(title);
@@ -114,7 +114,7 @@ public:
             case 13: return "+";
             case 14: return "^";
             case 15: return "0";
-            case 16: return ".";
+            case 16: return "x^2";
             case 17: return "=";
             case 18: return "-";
             case 19: return "%";
@@ -126,75 +126,47 @@ public:
     {
         if (operation == ' ')
         {
-            bool has_decimal = decimal0 > 0, decimal_placed = false;
-            
-            char * str = new char(num0.size() + 2);
-            
-            for (int i = 0, n = num0.size(); i < n + has_decimal; ++i)
+            int str_size = num0.size() + 1 + (num0.sign() == -1);
+
+            char * str = new char[str_size];
+
+            int i = 0;
+            if (num0.sign() == -1)
             {
-                if (has_decimal)
-                {
-                    if (decimal_placed)
-                    {
-                        str[i] = '0' + num0[i - 1];
-                    }
-                    else
-                    {
-                        if (n - decimal0 == i)
-                        {
-                            decimal_placed = true;
-                            str[i] = '.';
-                        }
-                        else
-                            str[i] = '0' + num0[i];
-                       
-                    }
-                }
-                else
-                    str[i] = '0' + num0[i];
+                *(str + i) = '-';
+                ++i;
             }
-            
-            str[num0.size() + has_decimal] = '\0';
+
+            for (int j = 0, n = num0.size(); j < n; j++, i++)
+                *(str + i) = '0' + num0[j];
+
+            *(str + i) = '\0';
 
             label_->setText(str);
-
+            
             delete[] str;
         }
         
         else
         {
-            bool has_decimal = decimal1 > 0, decimal_placed = false;
-            
-            char * str = new char(num1.size() + 2);
-            
-            for (int i = 0, n = num1.size(); i < n + has_decimal; ++i)
+            int str_size = num1.size() + 1 + (num1.sign() == -1);
+
+            char * str = new char[str_size];
+
+            int i = 0;
+            if (num1.sign() == -1)
             {
-                if (has_decimal)
-                {
-                    if (decimal_placed)
-                    {
-                        str[i] = '0' + num1[i - 1];
-                    }
-                    else
-                    {
-                        if (n - decimal1 == i)
-                        {
-                            decimal_placed = true;
-                            str[i] = '.';
-                        }
-                        else
-                            str[i] = '0' + num1[i];
-                       
-                    }
-                }
-                else
-                    str[i] = '0' + num1[i];
+                *(str + i) = '-';
+                ++i;
             }
-            
-            str[num1.size() + has_decimal] = '\0';
+
+            for (int j = 0, n = num1.size(); j < n; j++, i++)
+                *(str + i) = '0' + num1[j];
+
+            *(str + i) = '\0';
 
             label_->setText(str);
-
+            
             delete[] str;
         }
 
@@ -244,23 +216,9 @@ private slots:
     void press_4()
     {
         if (operation == ' ')
-        {
             num0 /= 10;
-            
-            if (decimal0 > 1)
-                --decimal0;
-            else if (decimal0 == 1)
-                decimal0 = -1;
-        }
         else
-        {
             num1 /= 10;
-            
-            if (decimal1 > 1)
-                --decimal1;
-            else if (decimal1 == 1)
-                decimal1 = -1;
-        }
 
         update_text();
         
@@ -312,9 +270,6 @@ private slots:
     {
         num0 = 0;
         num1 = 0;
-
-        decimal0 = -1;
-        decimal1 = -1;
         
         operation = ' ';
         
@@ -379,20 +334,20 @@ private slots:
         return;
     }
 
-    // .
+    // x^2
     void press_16()
     {
         if (operation == ' ')
         {
-            if (decimal0 == -1)
-                decimal0 = 0;
+            num0 *= num0;
         }
 
         else
         {
-            if (decimal1 == -1)
-                decimal1 = 0;
+            num1 *= num1;
         }
+
+        update_text();
         
         return;
     }
@@ -406,25 +361,51 @@ private slots:
             switch (operation)
             {
                 case '+':
-                    Calculator::add(num0, decimal0,
-                                    num1, decimal1);
+                    num0 += num1;
                     break;
+                    
                 case '-':
-                    Calculator::subtract(num0, decimal0,
-                                         num1, decimal1);
+                    num0 -= num1;
                     break;
 
                 case '*':
-                    Calculator::multiply(num0, decimal0,
-                                         num1, decimal1);
+                    num0 *= num1;
                     break;
+                    
                 case '/':
-                    Calculator::divide(num0, decimal0,
-                                       num1, decimal1);
+                    try
+                    {
+                        num0 /= num1;
+                    }
+
+                    catch (DivideByZeroError e)
+                    {}
+                
+                    break;
+                case '^':
+                    try
+                    {
+                        num0.pow(num1);
+                    }
+
+                    catch (NegativePowerError e)
+                    {}
+
+                    break;
+                case '%':
+                    try
+                    {
+                        num0 %= num1;
+                    }
+
+                    catch (DivideByZeroError e)
+                    {}
+
                     break;
             }
             
             operation = ' ';
+            num1 = 0;
 
             update_text();
         }
@@ -456,17 +437,12 @@ private:
         {
             num0 *= 10;
             num0 += digit;
-
-            if (decimal0 > -1)
-                ++decimal0;
         }
+        
         else
         {
             num1 *= 10;
             num1 += digit;
-
-            if (decimal1 > -1)
-                ++decimal1;
         }
     }
     
@@ -500,7 +476,6 @@ private:
     LongInt num0, num1;
 
     char operation;
-    int decimal0, decimal1;
 };
     
 #endif
